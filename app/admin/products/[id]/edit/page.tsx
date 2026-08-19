@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { updateProduct } from "./actions";
 import { notFound } from "next/navigation";
+import { CATEGORIES } from "@/lib/categories";
 
 export default async function EditProductPage({
     params,
@@ -71,12 +72,18 @@ export default async function EditProductPage({
 
                 <div>
                     <label className="block text-sm mb-1">Category</label>
-                    <input
+                    <select
                         name="category"
-                        type="text"
                         defaultValue={product.category}
+                        required
                         className="border rounded p-2 w-full"
-                    />
+                    >
+                        {CATEGORIES.map((c) => (
+                            <option key={c.value} value={c.value}>
+                                {c.label}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 <div>

@@ -1,10 +1,10 @@
-import { Archivo_Black, Inter, IBM_Plex_Mono } from "next/font/google";
+import { Archivo_Narrow, Inter, IBM_Plex_Mono } from "next/font/google";
 import Header from "./components/Header";
 import { CartProvider } from "./context/CartContext";
 import "./globals.css";
 
-const archivoBlack = Archivo_Black({
-    weight: "400",
+const archivoNarrow = Archivo_Narrow({
+    weight: ["700"],
     subsets: ["latin"],
     variable: "--font-display",
 });
@@ -28,7 +28,7 @@ export default function RootLayout({
     return (
         <html
             lang="en"
-            className={`${archivoBlack.variable} ${inter.variable} ${plexMono.variable}`}
+            className={`${archivoNarrow.variable} ${inter.variable} ${plexMono.variable}`}
         >
             <body>
                 <CartProvider>

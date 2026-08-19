@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Sparkles, Upload } from "lucide-react";
 import { createProduct } from "@/app/admin/products/new/actions";
 import { generateDescription } from "@/app/admin/products/new/generate-description";
+import { CATEGORIES } from "@/lib/categories";
 
 const inputClass =
     "border border-line rounded-lg p-3 w-full text-sm focus:outline-none focus:border-ink transition-colors";
@@ -64,14 +65,22 @@ export default function ProductForm() {
 
             <div>
                 <label className={labelClass}>Category</label>
-                <input
+                <select
                     name="category"
-                    type="text"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
+                    required
                     className={inputClass}
-                    placeholder="e.g. running"
-                />
+                >
+                    <option value="" disabled>
+                        Select a category
+                    </option>
+                    {CATEGORIES.map((c) => (
+                        <option key={c.value} value={c.value}>
+                            {c.label}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <div className="bg-bg border border-line rounded-lg p-4">
@@ -145,7 +154,6 @@ export default function ProductForm() {
                 <label className={labelClass}>Product image</label>
                 <label className="flex flex-col items-center justify-center gap-2 border border-dashed border-line rounded-lg p-6 cursor-pointer hover:border-ink transition-colors bg-bg">
                     {imagePreview ? (
-                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                             src={imagePreview}
                             alt="Preview"

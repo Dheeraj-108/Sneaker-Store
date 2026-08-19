@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { logout } from "@/app/logout/actions";
 import CartBadge from "./CartBadge";
 import Link from "next/link";
+import Image from "next/image";
+import NavLink from "./NavLink";
 
 export default async function Header() {
     const supabase = await createClient();
@@ -10,44 +12,75 @@ export default async function Header() {
     } = await supabase.auth.getUser();
 
     return (
-        <header className="border-b border-line bg-surface sticky top-0 z-10">
-            <div className="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
-                <Link href="/" className="font-display text-lg tracking-tight">
-                    SNEAKER CO
-                </Link>
-
-                {user ? (
-                    <div className="flex items-center gap-6 text-sm">
-                        <CartBadge />
-                        <span className="font-mono text-xs text-muted hidden sm:inline">
-                            {user.email}
+        <header className="fixed top-0 left-0 right-0 z-40 backdrop-blur-md bg-bg/80 border-b border-line">
+            <div className="max-w-360 mx-auto flex items-center justify-between h-20 px-4 sm:px-6 lg:px-16">
+                <div className="flex items-center gap-12">
+                    <Link href="/" className="flex items-center gap-3">
+                        <Image
+                            src="/icons/logo.png"
+                            alt=""
+                            width={32}
+                            height={32}
+                        />
+                        <span className="font-display font-bold text-[32px] leading-none tracking-[-0.8px] uppercase text-ink hidden sm:inline">
+                            Sneaker Co
                         </span>
+                    </Link>
+
+                    <nav className="hidden md:flex items-center gap-8">
+                        <NavLink href="/">New Drops</NavLink>
+                        <NavLink href="/shop">Shop All</NavLink>
+                        <NavLink href="/#categories">Categories</NavLink>
+                        <NavLink href="/about">About</NavLink>
+                    </nav>
+                </div>
+
+                <div className="flex items-center gap-6">
+                    <button aria-label="Search" className="hidden sm:block">
+                        <Image
+                            src="/icons/search.svg"
+                            alt=""
+                            width={18}
+                            height={18}
+                        />
+                    </button>
+
+                    {user ? (
                         <form action={logout}>
-                            <button
-                                type="submit"
-                                className="text-muted hover:text-ink transition-colors"
-                            >
-                                Log out
+                            <button aria-label="Account" type="submit">
+                                <Image
+                                    src="/icons/user.svg"
+                                    alt=""
+                                    width={16}
+                                    height={16}
+                                />
                             </button>
                         </form>
-                    </div>
-                ) : (
-                    <div className="flex items-center gap-6 text-sm">
-                        <CartBadge />
-                        <Link
-                            href="/login"
-                            className="text-muted hover:text-ink transition-colors"
-                        >
-                            Log in
+                    ) : (
+                        <Link href="/login" aria-label="Account">
+                            <Image
+                                src="/icons/user.svg"
+                                alt=""
+                                width={16}
+                                height={16}
+                            />
                         </Link>
-                        <Link
-                            href="/signup"
-                            className="text-ink border border-line rounded px-4 py-1.5 hover:border-ink transition-colors"
-                        >
-                            Sign up
-                        </Link>
-                    </div>
-                )}
+                    )}
+
+                    <CartBadge />
+
+                    <button
+                        aria-label="Menu"
+                        className="bg-black rounded-full size-8 flex items-center justify-center"
+                    >
+                        <Image
+                            src="/icons/menu-dot.svg"
+                            alt=""
+                            width={12}
+                            height={12}
+                        />
+                    </button>
+                </div>
             </div>
         </header>
     );
