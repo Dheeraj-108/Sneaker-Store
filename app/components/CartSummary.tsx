@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { CartItem } from "../context/CartContext";
+import { createClient } from "../../lib/supabase/client";
 import { createCheckoutSession } from "../cart/actions";
 
 const SHIPPING_ESTIMATE = 15;
 const TAX_RATE = 0.08;
 
 export default function CartSummary({ items }: { items: CartItem[] }) {
+    const router = useRouter();
     const [isCheckingOut, setIsCheckingOut] = useState(false);
     const [error, setError] = useState("");
 
@@ -21,6 +24,17 @@ export default function CartSummary({ items }: { items: CartItem[] }) {
     async function handleCheckout() {
         setError("");
         setIsCheckingOut(true);
+
+        const supabase = createClient();
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+
+        if (!user) {
+            router.push("/login");
+            return;
+        }
+
         try {
             const url = await createCheckoutSession(items);
             if (url) window.location.href = url;
@@ -38,13 +52,6 @@ export default function CartSummary({ items }: { items: CartItem[] }) {
                 Order Summary
             </h2>
 
-            {/*
-              No real shipping/tax calculation exists in the project yet —
-              this is a flat estimated rate and a placeholder tax rate for
-              display on this page only. It doesn't feed into
-              createCheckoutSession; Stripe Checkout determines the actual
-              shipping/tax charged at payment time.
-            */}
             <div className="flex flex-col gap-3">
                 <div className="flex justify-between font-mono text-xs tracking-[1.2px] uppercase">
                     <span className="text-muted">Subtotal</span>

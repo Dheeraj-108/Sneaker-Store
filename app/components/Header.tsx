@@ -1,9 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
-import { logout } from "@/app/logout/actions";
 import CartBadge from "./CartBadge";
 import Link from "next/link";
 import Image from "next/image";
 import NavLink from "./NavLink";
+import UserMenu from "./UserMenu";
 
 export default async function Header() {
     const supabase = await createClient();
@@ -45,41 +45,9 @@ export default async function Header() {
                         />
                     </button>
 
-                    {user ? (
-                        <form action={logout}>
-                            <button aria-label="Account" type="submit">
-                                <Image
-                                    src="/icons/user.svg"
-                                    alt=""
-                                    width={16}
-                                    height={16}
-                                />
-                            </button>
-                        </form>
-                    ) : (
-                        <Link href="/login" aria-label="Account">
-                            <Image
-                                src="/icons/user.svg"
-                                alt=""
-                                width={16}
-                                height={16}
-                            />
-                        </Link>
-                    )}
-
                     <CartBadge />
 
-                    <button
-                        aria-label="Menu"
-                        className="bg-black rounded-full size-8 flex items-center justify-center"
-                    >
-                        <Image
-                            src="/icons/menu-dot.svg"
-                            alt=""
-                            width={12}
-                            height={12}
-                        />
-                    </button>
+                    <UserMenu email={user?.email ?? null} />
                 </div>
             </div>
         </header>
