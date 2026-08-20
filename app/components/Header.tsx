@@ -4,8 +4,14 @@ import Link from "next/link";
 import Image from "next/image";
 import NavLink from "./NavLink";
 import UserMenu from "./UserMenu";
+import { headers } from "next/headers";
 
 export default async function Header() {
+    const headersList = await headers();
+    const pathname = headersList.get("x-pathname") ?? "";
+    if (pathname.startsWith("/admin")) {
+        return null;
+    }
     const supabase = await createClient();
     const {
         data: { user },
